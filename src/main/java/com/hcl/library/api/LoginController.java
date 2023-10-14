@@ -28,7 +28,6 @@ public class LoginController {
     public ResponseEntity<Object> login(@RequestBody UserAuth userAuth , HttpSession session) {
 
 
-        System.out.println(session.getAttribute("session-id").toString());
         User user = this.userRepository.findByUsername(userAuth.getUsername());
 
         if(user==null || !user.getPassword().equals(userAuth.getPassword())) {
@@ -58,7 +57,7 @@ public class LoginController {
     @GetMapping("/logout/")
     public ResponseEntity<Object> logout(HttpSession session) {
 
-        this.tokenRepository.deleteByToken(session.getAttribute("session-id").toString());
+        this.tokenRepository.deleteById(this.tokenRepository.findByToken(session.getAttribute("session-id").toString()).getId());
 
         session.removeAttribute("session-id");
 
